@@ -1,5 +1,5 @@
-import Icon from "react-native-vector-icons/AntDesign";
 import React, { useState, useEffect, useCallback } from "react";
+import { useNavigation } from '@react-navigation/native';
 import {
   StyleSheet,
   Text,
@@ -18,24 +18,27 @@ import InputEmail from "../../componets/InputEmail";
 import InputPassword from "../../componets/InputPassword";
 
 const initialState = {
-  login: "",
   email: "",
   password: "",
 };
 
-export default function RegistrationScreen({ onClick }) {
+export default function LoginScreen({ onClick }) {
+  // const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
+  // const [dimensions, setdimensions] = useState(Dimensions.get("window").width);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [avatar, setAvatar] = useState(false);
   const { height, width } = useWindowDimensions();
   const land = height > width;
+  const navigation = useNavigation();
 
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", (e) => {
+      //   setIsShowKeyboard(true);
       setKeyboardHeight(e.endCoordinates.height - 155);
-      // console.log(e);
+      //  console.log(e);
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      // setIsShowKeyboard(false);
       setKeyboardHeight(0);
     });
 
@@ -45,20 +48,25 @@ export default function RegistrationScreen({ onClick }) {
     };
   }, []);
 
-  const sendLogin = () => {
+  const keyboardShow = () => {
+    //  setIsShowKeyboard(true);
+  };
+  const keyboardHide = () => {
+    //  setIsShowKeyboard(false);
     Keyboard.dismiss();
+  };
+
+  const sendLogin = () => {
+    keyboardHide();
     console.log(state);
     setstate(initialState);
+    navigation.navigate("Home")
   };
 
-  const addAvatar = () => {
-    setAvatar(!avatar);
-  };
-
-  //console.log("width: ", width, "  heigth:", height, "scale: ", scale);
+  //console.log("width: ", width, "  heigth:", height);
   // console.log(keyboardHeight);
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
         <ImageBackground
           style={{ ...styles.image, width: width, height: height }}
@@ -74,55 +82,30 @@ export default function RegistrationScreen({ onClick }) {
             <View
               style={{
                 ...styles.form,
+                //marginBottom: isShowKeyboard ? -keyboardHeight + 100 : 0,
                 marginBottom: keyboardHeight,
-                paddingBottom: land ? 44 : 28,
+                paddingBottom: land ? 112 : 32,
                 width: land ? "100%" : "50%",
               }}
             >
-              <View style={styles.avatar}>
-                <TouchableOpacity
-                  style={{
-                    ...styles.avatarBtn,
-                    borderColor: avatar ? "#e8e8e8" : "#FF6C00",
-                    transform: [
-                      ...styles.avatarBtn.transform,
-                      avatar ? { rotate: "45deg" } : { rotate: "0deg" },
-                    ],
-                  }}
-                  onPress={addAvatar}
-                >
-                  <Icon
-                    name="plus"
-                    size={16}
-                    color={avatar ? "#bdbdbd" : "#FF6C00"}
-                  ></Icon>
-                </TouchableOpacity>
-              </View>
               <View style={styles.header}>
-                <Text style={styles.headerTitle}>Реєстрація</Text>
+                <Text style={styles.headerTitle}>Увійти</Text>
               </View>
-              <InputEmail
-                onChangeText={(value) =>
-                  setstate((prevState) => ({ ...prevState, login: value }))
-                }
-                value={state.login}
-                placeholder="Введіть логін"
-                //onFocus={null}
-              />
+
               <InputEmail
                 onChangeText={(value) =>
                   setstate((prevState) => ({ ...prevState, email: value }))
                 }
                 value={state.email}
+                onFocus={keyboardShow}
                 placeholder="Адреса електронної пошти"
-                //onFocus={null}
               />
               <InputPassword
                 onChangeText={(value) =>
                   setstate((prevState) => ({ ...prevState, password: value }))
                 }
                 value={state.password}
-                // onFocus={null}
+                onFocus={keyboardShow}
               />
 
               <TouchableOpacity
@@ -131,10 +114,12 @@ export default function RegistrationScreen({ onClick }) {
                 onPress={sendLogin}
                 // disabled={true}
               >
-                <Text style={styles.btnTitle}>Зареєструватися</Text>
+                <Text style={styles.btnTitle}>Увійти</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={onClick}>
-                <Text style={styles.btnDown}>Вже маєш акаунт? Увійти</Text>
+              <TouchableOpacity onPress={() => navigation.navigate("Registration")}>
+                <Text style={styles.btnDown}>
+                  Немає акаунта? Зареєструватися
+                </Text>
               </TouchableOpacity>
             </View>
           </KeyboardAvoidingView>
@@ -150,10 +135,9 @@ const styles = StyleSheet.create({
   },
   image: {
     resizeMode: "cover",
-
-    position: "absolute",
-    left: 0,
-    top: 0,
+    // position: "absolute",
+    // left: 0,
+    // top: 0,
     // width: Dimensions.get("window").width,
     // height: Dimensions.get("window").height,
   },
@@ -183,9 +167,7 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    // marginVertical: 16,
-    marginTop: 72,
-    marginBottom: 12,
+    marginVertical: 12,
   },
   headerTitle: {
     color: "#212121",
@@ -197,29 +179,5 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     textAlign: "center",
-  },
-  avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 16,
-    backgroundColor: "#f6f6f6",
-    position: "absolute",
-    left: "50%",
-    alignItems: "center",
-    transform: [{ translateY: -60 }, { translateX: -44 }],
-  },
-  avatarBtn: {
-    width: 24,
-    height: 24,
-    alignContent: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 20,
-    borderWidth: 1,
-    backgroundColor: "#fff",
-    position: "absolute",
-    right: 0,
-    bottom: 0,
-    transform: [{ translateY: -14 }, { translateX: 12 }],
   },
 });

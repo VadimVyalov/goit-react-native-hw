@@ -1,49 +1,62 @@
+import "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import React, { useCallback, useState } from "react";
-import { View } from "react-native";
+import { View, Button } from "react-native";
 
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import LoginScreen from "./Screnns/LoginScreen/LoginScreen";
-import RegistrationScreen from "./Screnns/RegistrationScreen/RegistrationScreen";
+import LoginScreen from "./Screens/LoginScreen/LoginScreen";
+import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen";
 
-SplashScreen.preventAutoHideAsync();
+import Home from "./Screens/Home/Home";
+import { MapScreen } from "./Screens/MapScreen/MapScreen";
+
+// SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  //   console.log(Platform.OS);
-  const [loginScreen, setLoginScreen] = useState(true);
   const [fontsLoaded] = useFonts({
     "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
   });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
+  // const onLayoutRootView = useCallback(async () => {
+  //   if (fontsLoaded) {
+  //     await SplashScreen.hideAsync();
+  //   }
+  // }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return null;
   }
 
-  const changeScreen = () => {
-    setLoginScreen(!loginScreen);
-  };
+  const MainStack = createStackNavigator();
 
   return (
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      {loginScreen ? (
-        <LoginScreen onClick={changeScreen} />
-      ) : (
-        <RegistrationScreen onClick={changeScreen} />
-      )}
-    </View>
+    <NavigationContainer>
+      <MainStack.Navigator initialRouteName="Home">
+        <MainStack.Screen
+          name="Registration"
+          component={RegistrationScreen}
+          options={{ headerShown: false }}
+        />
+        <MainStack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <MainStack.Screen
+          name="Home"
+          component={Home}
+          options={{ headerShown: false }}
+        />
+        <MainStack.Screen
+          name="MapScreen"
+          component={MapScreen}
+          options={{ headerShown: true }}
+        />
+      </MainStack.Navigator>
+    </NavigationContainer>
   );
 }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//   },
-// });
