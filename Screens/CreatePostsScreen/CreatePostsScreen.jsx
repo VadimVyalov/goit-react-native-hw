@@ -1,20 +1,17 @@
 import { Feather, SimpleLineIcons } from "@expo/vector-icons";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
   Text,
   View,
-  ImageBackground,
   TextInput,
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
-  Dimensions,
   useWindowDimensions,
-  Image,
 } from "react-native";
 
 const initialState = {
@@ -25,8 +22,6 @@ const initialState = {
 export default function RegistrationScreen({ onClick }) {
   const [state, setstate] = useState(initialState);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [locationTitle, setlocationTitle] = useState("");
-  const [photoTitle, setPhotoTitle] = useState("");
   const { height, width } = useWindowDimensions();
   const navigation = useNavigation();
   useEffect(() => {
@@ -55,8 +50,6 @@ export default function RegistrationScreen({ onClick }) {
     setAvatar(!avatar);
   };
 
-  //console.log("width: ", width, "  heigth:", height, "scale: ", scale);
-  // console.log(keyboardHeight);
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
@@ -65,7 +58,6 @@ export default function RegistrationScreen({ onClick }) {
           style={{
             height: "100%",
             justifyContent: "flex-end",
-            //  justifyContent: "space-between",
             alignItems: "center",
             width: "100%",
           }}
@@ -80,10 +72,7 @@ export default function RegistrationScreen({ onClick }) {
           >
             <View>
               <View style={styles.photo}>
-                <TouchableOpacity
-                  style={styles.takePhoto}
-                  // onPress={addPhoto}
-                >
+                <TouchableOpacity style={styles.takePhoto}>
                   <Feather name="camera" color="#BDBDBD" size={24} />
                 </TouchableOpacity>
               </View>

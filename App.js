@@ -54,7 +54,7 @@ export default function App() {
         <MainStack.Screen
           name="MapScreen"
           component={MapScreen}
-          options={{ headerShown: true }}
+          options={{ headerShown: true, title: "Мапа" }}
         />
       </MainStack.Navigator>
     </NavigationContainer>
