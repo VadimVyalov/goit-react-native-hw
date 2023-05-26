@@ -8,9 +8,9 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import LoginScreen from "./Screens/LoginScreen/LoginScreen";
 import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen";
-
 import Home from "./Screens/Home/Home";
-import { MapScreen } from "./Screens/MapScreen/MapScreen";
+import MapScreen from "./Screens/MapScreen/MapScreen";
+import CommentsScreen from "./Screens/CommentsScreen/CommentsScreen";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -55,6 +55,11 @@ export default function App() {
           name="MapScreen"
           component={MapScreen}
           options={{ headerShown: true, title: "Мапа" }}
+        />
+        <MainStack.Screen
+          name="CommentsScreen"
+          component={CommentsScreen}
+          options={{ headerShown: true, title: "Коментарі" }}
         />
       </MainStack.Navigator>
     </NavigationContainer>

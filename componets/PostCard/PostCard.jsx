@@ -9,10 +9,10 @@ import {
 } from "react-native";
 
 import { SimpleLineIcons, Fontisto, AntDesign } from "@expo/vector-icons";
-
+import { useNavigation } from "@react-navigation/native";
 export const PostCard = ({ post }) => {
   const { image, description, comments, lacation, likes } = post;
-
+  const navigation = useNavigation();
   return (
     <View style={styles.postCard}>
       <View>
@@ -22,7 +22,10 @@ export const PostCard = ({ post }) => {
 
       <View style={styles.additional}>
         <View style={styles.leftSideConteiner}>
-          <TouchableOpacity style={styles.commentContainer}>
+          <TouchableOpacity
+            style={styles.commentContainer}
+            onPress={() => navigation.navigate("CommentsScreen")}
+          >
             <Fontisto
               name="comment"
               style={styles.commentIcon}
@@ -41,7 +44,10 @@ export const PostCard = ({ post }) => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity style={styles.locationContainer}>
+        <TouchableOpacity
+          style={styles.locationContainer}
+          onPress={() => navigation.navigate("MapScreen")}
+        >
           <SimpleLineIcons
             style={styles.locationIcon}
             name="location-pin"
