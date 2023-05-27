@@ -1,16 +1,6 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  FlatList,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { StyleSheet, SafeAreaView, FlatList } from "react-native";
 
-import { SimpleLineIcons, Fontisto, AntDesign } from "@expo/vector-icons";
-
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 
 import { testPosts } from "../../posts.js";
 import { UserInfo } from "../../componets/UserInfo/UserInfo.jsx";

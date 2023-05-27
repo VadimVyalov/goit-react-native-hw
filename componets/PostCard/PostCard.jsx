@@ -1,14 +1,6 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  FlatList,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 
-import { SimpleLineIcons, Fontisto, AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 export const PostCard = ({ post }) => {
   const { image, description, comments, lacation, likes } = post;
@@ -26,8 +18,8 @@ export const PostCard = ({ post }) => {
             style={styles.commentContainer}
             onPress={() => navigation.navigate("CommentsScreen")}
           >
-            <Fontisto
-              name="comment"
+            <Feather
+              name="message-circle"
               style={styles.commentIcon}
               color={!comments ? "#BDBDBD" : "#FF6C00"}
             />
@@ -35,9 +27,9 @@ export const PostCard = ({ post }) => {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.likeContainer}>
-            <AntDesign
-              name="like2"
-              size={20}
+            <Feather
+              style={styles.likeIcon}
+              name="thumbs-up"
               color={!likes ? "#BDBDBD" : "#FF6C00"}
             />
             <Text style={styles.comment}>{likes}</Text>
@@ -48,11 +40,7 @@ export const PostCard = ({ post }) => {
           style={styles.locationContainer}
           onPress={() => navigation.navigate("MapScreen")}
         >
-          <SimpleLineIcons
-            style={styles.locationIcon}
-            name="location-pin"
-            color="#BDBDBD"
-          />
+          <Feather style={styles.locationIcon} name="map-pin" color="#BDBDBD" />
           <Text style={styles.location}>{lacation}</Text>
         </TouchableOpacity>
       </View>
@@ -106,7 +94,7 @@ const styles = StyleSheet.create({
 
   commentIcon: {
     fontSize: 20,
-    transform: [{ rotateY: "180deg" }, { scaleX: 0.75 }],
+    transform: [{ rotateY: "180deg" }],
   },
   comment: {
     marginLeft: 5,
@@ -121,6 +109,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 15,
   },
+  likeIcon: {
+    fontSize: 20,
+  },
   locationContainer: {
     display: "flex",
     flexDirection: "row",
@@ -128,7 +119,6 @@ const styles = StyleSheet.create({
   },
   locationIcon: {
     fontSize: 20,
-    transform: [{ scaleX: 1.1 }],
   },
   location: {
     marginLeft: 5,

@@ -1,4 +1,4 @@
-import { Feather, SimpleLineIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import {
@@ -109,9 +109,9 @@ export default function RegistrationScreen({ onClick }) {
                   textAlign={"left"}
                 />
                 <TouchableOpacity style={styles.locationBtn}>
-                  <SimpleLineIcons
+                  <Feather
                     style={styles.locationIcon}
-                    name="location-pin"
+                    name="map-pin"
                     onPress={() => navigation.navigate("MapScreen")}
                   />
                 </TouchableOpacity>
@@ -164,7 +164,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     fontSize: 20,
     color: "#BDBDBD",
-    transform: [{ scaleX: 1.1 }],
   },
 
   locationBtn: { position: "absolute" },

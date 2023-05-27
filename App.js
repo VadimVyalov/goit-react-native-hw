@@ -54,12 +54,21 @@ export default function App() {
         <MainStack.Screen
           name="MapScreen"
           component={MapScreen}
-          options={{ headerShown: true, title: "Мапа" }}
+          options={{
+            headerShown: true,
+            title: "Мапа",
+            headerTitleAlign: "center",
+          }}
         />
         <MainStack.Screen
           name="CommentsScreen"
           component={CommentsScreen}
-          options={{ headerShown: true, title: "Коментарі" }}
+          options={{
+            headerShown: true,
+            title: "Коментарі",
+            //headerTitleStyle: { marginLeft: 70 },
+            headerTitleAlign: "center",
+          }}
         />
       </MainStack.Navigator>
     </NavigationContainer>

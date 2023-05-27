@@ -1,15 +1,14 @@
 import React from "react";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import PostsScreen from "../../Screens/PostsScreen/PostsScreen";
 import ProfileScreen from "../../Screens/ProfileScreen/ProfileScreen";
 import CreatePostsScreen from "../../Screens/CreatePostsScreen/CreatePostsScreen";
 
-import { AntDesign, Ionicons, Feather } from "@expo/vector-icons";
-// import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import { Ionicons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
+
 const Home = () => {
   const navigation = useNavigation();
   const Tab = createBottomTabNavigator();
@@ -43,10 +42,10 @@ const Home = () => {
         options={() => ({
           title: "Публікації",
           headerTintColor: "#212121",
+          headerTitleAlign: "center",
           headerTitleStyle: {
             fontFamily: "Roboto-Medium",
             fontSize: 17,
-            marginLeft: 130,
           },
           headerRight: () => (
             <TouchableOpacity
@@ -61,7 +60,7 @@ const Home = () => {
           tabBarShowLabel: false,
 
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="grid-outline" size={size} color={color} />
+            <Feather name="grid" size={size} color={color} />
           ),
         })}
         name="Posts"
@@ -74,10 +73,10 @@ const Home = () => {
         options={({ navigation }) => ({
           title: "Створити публікацію",
           headerTintColor: "#212121",
+          headerTitleAlign: "center",
           headerTitleStyle: {
             fontFamily: "Roboto-Medium",
             fontSize: 17,
-            marginLeft: 50,
           },
           headerLeft: () => (
             <TouchableOpacity
@@ -85,14 +84,14 @@ const Home = () => {
               style={{ marginLeft: 16 }}
               onPress={() => navigation.navigate("Posts")}
             >
-              <AntDesign name="arrowleft" size={24} color="#212121CC" />
+              <Feather name="arrow-left" size={24} color="#212121CC" />
             </TouchableOpacity>
           ),
 
           tabBarShowLabel: false,
           tabBarStyle: { display: "none" },
           tabBarIcon: ({ color, size }) => (
-            <AntDesign name="plus" size={size} color={color} />
+            <Feather name="plus" size={size} color={color} />
           ),
         })}
         name="CreatePosts"
