@@ -2,7 +2,6 @@ import { configureStore } from "@reduxjs/toolkit";
 import { postsReducer } from "./postsSlice";
 
 import {
-  persistReducer,
   persistStore,
   FLUSH,
   REHYDRATE,
