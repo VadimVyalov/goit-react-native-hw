@@ -14,14 +14,16 @@ import {
   FlatList,
   SafeAreaView,
 } from "react-native";
-import { testPosts } from "../../posts.js";
-import { PostCard } from "../../componets/PostCard/PostCard";
+
+import { selectPosts } from "../../Redux/postsSlice.js";
+import { useSelector } from "react-redux";
+import { PostCard } from "../../componets/PostCard/PostCard.jsx";
 
 export default function ProfileScreen({ onClick }) {
   const [avatar, setAvatar] = useState(false);
   const { height, width } = useWindowDimensions();
   const navigation = useNavigation();
-  const [posts, setPosts] = useState(testPosts);
+  const posts = useSelector(selectPosts);
 
   const addAvatar = () => {
     setAvatar(!avatar);
@@ -63,8 +65,9 @@ export default function ProfileScreen({ onClick }) {
           <View style={styles.header}>
             <Text style={styles.headerTitle}>User Name</Text>
           </View>
-          <SafeAreaView style={styles.container}>
+          <SafeAreaView style={{ paddingBottom: 296 }}>
             <FlatList
+              style={{ paddingTop: 16 }}
               data={posts}
               keyExtractor={(post) => post.id}
               renderItem={(post) => <PostCard post={post.item} />}

@@ -11,7 +11,10 @@ import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen"
 import Home from "./Screens/Home/Home";
 import MapScreen from "./Screens/MapScreen/MapScreen";
 import CommentsScreen from "./Screens/CommentsScreen/CommentsScreen";
-
+import { persistor, store } from "./Redux/store";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import "react-native-get-random-values";
 // SplashScreen.preventAutoHideAsync();
 
 export default function App() {
@@ -34,43 +37,47 @@ export default function App() {
   const MainStack = createStackNavigator();
 
   return (
-    <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Home">
-        <MainStack.Screen
-          name="Registration"
-          component={RegistrationScreen}
-          options={{ headerShown: false }}
-        />
-        <MainStack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <MainStack.Screen
-          name="Home"
-          component={Home}
-          options={{ headerShown: false }}
-        />
-        <MainStack.Screen
-          name="MapScreen"
-          component={MapScreen}
-          options={{
-            headerShown: true,
-            title: "Мапа",
-            headerTitleAlign: "center",
-          }}
-        />
-        <MainStack.Screen
-          name="CommentsScreen"
-          component={CommentsScreen}
-          options={{
-            headerShown: true,
-            title: "Коментарі",
-            //headerTitleStyle: { marginLeft: 70 },
-            headerTitleAlign: "center",
-          }}
-        />
-      </MainStack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <PersistGate loader={null} persistor={persistor}>
+        <NavigationContainer>
+          <MainStack.Navigator initialRouteName="Login">
+            <MainStack.Screen
+              name="Registration"
+              component={RegistrationScreen}
+              options={{ headerShown: false }}
+            />
+            <MainStack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <MainStack.Screen
+              name="Home"
+              component={Home}
+              options={{ headerShown: false }}
+            />
+            <MainStack.Screen
+              name="MapScreen"
+              component={MapScreen}
+              options={{
+                headerShown: true,
+                title: "Мапа",
+                headerTitleAlign: "center",
+              }}
+            />
+            <MainStack.Screen
+              name="CommentsScreen"
+              component={CommentsScreen}
+              options={{
+                headerShown: true,
+                title: "Коментарі",
+                //headerTitleStyle: { marginLeft: 70 },
+                headerTitleAlign: "center",
+              }}
+            />
+          </MainStack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
   );
 }

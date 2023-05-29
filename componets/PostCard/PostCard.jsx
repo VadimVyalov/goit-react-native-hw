@@ -2,21 +2,28 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import { selectComments } from "../../Redux/postsSlice";
+import { useSelector } from "react-redux";
+
 export const PostCard = ({ post }) => {
-  const { image, description, comments, lacation, likes } = post;
+  const allComments = useSelector(selectComments);
+
+  const { id, photo, photoTitle, locationTitle, likes, location } = post;
+  const comments =
+    allComments?.filter((comment) => comment.postid === id).length || 0;
   const navigation = useNavigation();
   return (
     <View style={styles.postCard}>
       <View>
-        <Image style={styles.image} source={{ uri: image }} />
-        <Text style={styles.description}>{description}</Text>
+        <Image style={styles.image} source={{ uri: photo }} />
+        <Text style={styles.description}>{photoTitle}</Text>
       </View>
 
       <View style={styles.additional}>
         <View style={styles.leftSideConteiner}>
           <TouchableOpacity
             style={styles.commentContainer}
-            onPress={() => navigation.navigate("CommentsScreen")}
+            onPress={() => navigation.navigate("CommentsScreen", { id })}
           >
             <Feather
               name="message-circle"
@@ -38,10 +45,10 @@ export const PostCard = ({ post }) => {
 
         <TouchableOpacity
           style={styles.locationContainer}
-          onPress={() => navigation.navigate("MapScreen")}
+          onPress={() => navigation.navigate("MapScreen", { location })}
         >
           <Feather style={styles.locationIcon} name="map-pin" color="#BDBDBD" />
-          <Text style={styles.location}>{lacation}</Text>
+          <Text style={styles.location}>{locationTitle}</Text>
         </TouchableOpacity>
       </View>
     </View>

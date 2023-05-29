@@ -47,11 +47,11 @@ const Home = () => {
             fontFamily: "Roboto-Medium",
             fontSize: 17,
           },
+
           headerRight: () => (
             <TouchableOpacity
               activeOpacity={0.8}
               style={{ marginRight: 16 }}
-              // onPress={signOut}
               onPress={() => navigation.navigate("Login")}
             >
               <Feather name="log-out" size={22} color="#BDBDBD" />
@@ -78,6 +78,8 @@ const Home = () => {
             fontFamily: "Roboto-Medium",
             fontSize: 17,
           },
+          unmountOnBlur: true,
+
           headerLeft: () => (
             <TouchableOpacity
               activeOpacity={0.8}

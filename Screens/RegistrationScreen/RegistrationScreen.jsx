@@ -1,6 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
   Text,
@@ -24,7 +24,7 @@ const initialState = {
   password: "",
 };
 
-export default function RegistrationScreen({ onClick  }) {
+export default function RegistrationScreen({ onClick }) {
   const [state, setstate] = useState(initialState);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [avatar, setAvatar] = useState(false);
@@ -50,7 +50,7 @@ export default function RegistrationScreen({ onClick  }) {
     Keyboard.dismiss();
     console.log(state);
     setstate(initialState);
-   navigation.navigate("Home");
+    navigation.navigate("Home");
   };
 
   const addAvatar = () => {
@@ -156,8 +156,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     top: 0,
-    // width: Dimensions.get("window").width,
-    // height: Dimensions.get("window").height,
   },
 
   form: {
