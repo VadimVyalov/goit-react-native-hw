@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 export const UserInfo = ({
-  name = "Test User",
+  login = "Test User",
   email = "user@mail.com",
   avatar = require("../../assets/images/avatar.png"),
 }) => {
@@ -20,10 +20,10 @@ export const UserInfo = ({
         >
 </ImageBackground> */}
 
-      <Image style={styles.avatar} source={avatar} />
+      <Image style={styles.avatar} source={{ uri: avatar }} />
 
       <View style={styles.description}>
-        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.name}>{login}</Text>
         <Text style={styles.email}>{email}</Text>
       </View>
     </View>

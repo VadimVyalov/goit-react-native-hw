@@ -1,40 +1,42 @@
 import { AntDesign } from "@expo/vector-icons";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
   Text,
   View,
   ImageBackground,
-  TextInput,
+  Image,
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
-  Dimensions,
   useWindowDimensions,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import InputEmail from "../../componets/InputEmail";
 import InputPassword from "../../componets/InputPassword";
-
+import { authSignUpUser } from "../../Redux/auth/authOperations";
 const initialState = {
   login: "",
   email: "",
   password: "",
+  avatar: "",
 };
 
-export default function RegistrationScreen({ onClick }) {
+export default function RegistrationScreen() {
   const [state, setstate] = useState(initialState);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [avatar, setAvatar] = useState(false);
   const { height, width } = useWindowDimensions();
   const land = height > width;
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", (e) => {
-      setKeyboardHeight(e.endCoordinates.height - 155);
-      // console.log(e);
+      setKeyboardHeight(e.endCoordinates.height - 226);
     });
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
       setKeyboardHeight(0);
@@ -48,17 +50,34 @@ export default function RegistrationScreen({ onClick }) {
 
   const sendLogin = () => {
     Keyboard.dismiss();
-    console.log(state);
-    setstate(initialState);
-    navigation.navigate("Home");
+    dispatch(authSignUpUser(state));
   };
 
-  const addAvatar = () => {
-    setAvatar(!avatar);
+  const addAvatar = async () => {
+    if (avatar) {
+      setstate((prevState) => ({
+        ...prevState,
+        avatar: "",
+      }));
+      setAvatar(false);
+      return;
+    }
+
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setstate((prevState) => ({
+        ...prevState,
+        avatar: result.assets[0].uri,
+      }));
+      setAvatar(true);
+    }
   };
 
-  //console.log("width: ", width, "  heigth:", height, "scale: ", scale);
-  // console.log(keyboardHeight);
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
@@ -82,6 +101,12 @@ export default function RegistrationScreen({ onClick }) {
               }}
             >
               <View style={styles.avatar}>
+                {avatar && (
+                  <Image
+                    style={styles.avatarImg}
+                    source={{ uri: state.avatar }}
+                  />
+                )}
                 <TouchableOpacity
                   style={{
                     ...styles.avatarBtn,
@@ -183,7 +208,6 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    // marginVertical: 16,
     marginTop: 72,
     marginBottom: 12,
   },
@@ -207,6 +231,12 @@ const styles = StyleSheet.create({
     left: "50%",
     alignItems: "center",
     transform: [{ translateY: -60 }, { translateX: -44 }],
+    // overflow: "hidden",
+  },
+  avatarImg: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
   },
   avatarBtn: {
     width: 24,

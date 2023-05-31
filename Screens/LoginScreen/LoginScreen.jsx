@@ -1,44 +1,39 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { useNavigation } from '@react-navigation/native';
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 import {
   StyleSheet,
   Text,
   View,
   ImageBackground,
-  TextInput,
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
-  Dimensions,
   useWindowDimensions,
 } from "react-native";
 import InputEmail from "../../componets/InputEmail";
 import InputPassword from "../../componets/InputPassword";
-
+import { authSignInUser } from "../../Redux/auth/authOperations";
 const initialState = {
   email: "",
   password: "",
 };
 
 export default function LoginScreen({ onClick }) {
-  // const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setstate] = useState(initialState);
-  // const [dimensions, setdimensions] = useState(Dimensions.get("window").width);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const { height, width } = useWindowDimensions();
   const land = height > width;
   const navigation = useNavigation();
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const showSubscription = Keyboard.addListener("keyboardDidShow", (e) => {
-      //   setIsShowKeyboard(true);
-      setKeyboardHeight(e.endCoordinates.height - 155);
-      //  console.log(e);
+      setKeyboardHeight(e.endCoordinates.height - 226);
     });
+
     const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
-      // setIsShowKeyboard(false);
       setKeyboardHeight(0);
     });
 
@@ -48,25 +43,14 @@ export default function LoginScreen({ onClick }) {
     };
   }, []);
 
-  const keyboardShow = () => {
-    //  setIsShowKeyboard(true);
-  };
-  const keyboardHide = () => {
-    //  setIsShowKeyboard(false);
-    Keyboard.dismiss();
-  };
-
   const sendLogin = () => {
-    keyboardHide();
-    console.log(state);
+    Keyboard.dismiss();
+    dispatch(authSignInUser(state));
     setstate(initialState);
-    navigation.navigate("Home")
   };
 
-  //console.log("width: ", width, "  heigth:", height);
-  // console.log(keyboardHeight);
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
         <ImageBackground
           style={{ ...styles.image, width: width, height: height }}
@@ -97,7 +81,6 @@ export default function LoginScreen({ onClick }) {
                   setstate((prevState) => ({ ...prevState, email: value }))
                 }
                 value={state.email}
-                onFocus={keyboardShow}
                 placeholder="Адреса електронної пошти"
               />
               <InputPassword
@@ -105,7 +88,6 @@ export default function LoginScreen({ onClick }) {
                   setstate((prevState) => ({ ...prevState, password: value }))
                 }
                 value={state.password}
-                onFocus={keyboardShow}
               />
 
               <TouchableOpacity
@@ -116,7 +98,9 @@ export default function LoginScreen({ onClick }) {
               >
                 <Text style={styles.btnTitle}>Увійти</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate("Registration")}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate("Registration")}
+              >
                 <Text style={styles.btnDown}>
                   Немає акаунта? Зареєструватися
                 </Text>

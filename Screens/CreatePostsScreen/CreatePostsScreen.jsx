@@ -20,8 +20,12 @@ import {
   useWindowDimensions,
   Image,
 } from "react-native";
-import { addPost, deletePost } from "../../Redux/postsSlice";
+import { addPost, deletePost } from "../../Redux/post/postsReucer";
 import { useDispatch } from "react-redux";
+import {
+  uploadImage,
+  writeDataToFirestore,
+} from "../../Redux/post/postOperation";
 
 export default function RegistrationScreen({ navigation }) {
   const [locationTitle, setLocationTitle] = useState("");
@@ -70,21 +74,37 @@ export default function RegistrationScreen({ navigation }) {
     };
   }, []);
 
-  const sendPost = () => {
+  const sendPost = async () => {
     Keyboard.dismiss();
+    // try {
 
+    //
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
+    const photoUri = "qqq"; //await uploadImage(photo, "photo/");
+
+    const docId = await writeDataToFirestore({
+      photoUri,
+      locationTitle,
+      photoTitle,
+      location,
+    });
+    console.log(docId);
     // setstate(initialState);
 
     // console.log(location);
-    dispatch(
-      addPost({
-        id: Crypto.randomUUID(),
-        photo,
-        locationTitle,
-        photoTitle,
-        location,
-      })
-    );
+    // dispatch(
+    //   addPost({
+    //     id: Crypto.randomUUID(),
+    //     photo,
+    //     locationTitle,
+    //     photoTitle,
+    //     location,
+    //   })
+    // );
+
     navigation.goBack();
   };
 

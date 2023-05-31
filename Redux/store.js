@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { postsReducer } from "./postsSlice";
-
+import { postsReducer } from "./post/postsReucer";
+import { authReducer } from "./auth/authReducer";
 import {
   persistStore,
   FLUSH,
@@ -14,6 +14,7 @@ import {
 export const store = configureStore({
   reducer: {
     posts: postsReducer,
+    auth: authReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

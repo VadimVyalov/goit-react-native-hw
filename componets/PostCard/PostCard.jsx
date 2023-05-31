@@ -2,8 +2,9 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { selectComments } from "../../Redux/postsSlice";
+import { selectComments } from "../../Redux/post/postsReucer";
 import { useSelector } from "react-redux";
+import { getDataFromFirestore } from "../../Redux/post/postOperation";
 
 export const PostCard = ({ post }) => {
   const allComments = useSelector(selectComments);
@@ -12,6 +13,13 @@ export const PostCard = ({ post }) => {
   const comments =
     allComments?.filter((comment) => comment.postid === id).length || 0;
   const navigation = useNavigation();
+
+  useEffect(() => {
+    (async () => {
+      await getDataFromFirestore();
+    })();
+  }, []);
+
   return (
     <View style={styles.postCard}>
       <View>

@@ -22,7 +22,7 @@ import {
   addComment,
   selectPosts,
   selectComments,
-} from "../../Redux/postsSlice";
+} from "../../Redux/post/postsReucer";
 import { useDispatch, useSelector } from "react-redux";
 import dateFormat from "dateformat";
 import * as Crypto from "expo-crypto";

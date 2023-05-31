@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persistReducer } from "redux-persist";
-import * as Crypto from "expo-crypto";
+//import * as Crypto from "expo-crypto";
 const postsSlice = createSlice({
   name: "posts",
   initialState: { posts: [] },
@@ -15,16 +15,6 @@ const postsSlice = createSlice({
       state.comments = [];
     },
     addComment(state, { payload }) {
-      // state.posts.push({ ...state.posts, payload });
-      // let currentPost = state.posts.find((post) => post.id === payload.postid);
-      // state.posts = state.posts.filter((post) => post.id !== payload.postid);
-
-      // currentPost = { ...currentPost, comments: "new" };
-
-      // state.posts.push(currentPost);
-
-      // console.log(state.posts);
-
       state.comments.push(payload);
     },
   },

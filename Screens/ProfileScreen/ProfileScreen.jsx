@@ -15,7 +15,7 @@ import {
   SafeAreaView,
 } from "react-native";
 
-import { selectPosts } from "../../Redux/postsSlice.js";
+import { selectPosts } from "../../Redux/post/postsReucer.js";
 import { useSelector } from "react-redux";
 import { PostCard } from "../../componets/PostCard/PostCard.jsx";
 
