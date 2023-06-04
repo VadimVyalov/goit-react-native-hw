@@ -1,7 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import * as Crypto from "expo-crypto";
 import { Camera, CameraType } from "expo-camera";
 
 import * as ImagePicker from "expo-image-picker";
@@ -20,12 +19,13 @@ import {
   useWindowDimensions,
   Image,
 } from "react-native";
-import { addPost, deletePost } from "../../Redux/post/postsReucer";
-import { useDispatch } from "react-redux";
+import { deletePost } from "../../Redux/post/postsReucer";
+import { useDispatch, useSelector } from "react-redux";
 import {
   uploadImage,
   writeDataToFirestore,
 } from "../../Redux/post/postOperation";
+import { selectUser } from "../../Redux/auth/authReducer";
 
 export default function RegistrationScreen({ navigation }) {
   const [locationTitle, setLocationTitle] = useState("");
@@ -35,10 +35,11 @@ export default function RegistrationScreen({ navigation }) {
   const isFocused = useIsFocused();
   const [cameraRef, setCameraRef] = useState(null);
   const [photo, setPhoto] = useState(null);
-  const [type, setType] = useState(CameraType.back);
+  const type = CameraType.back;
   const [permission, requestPermission] = Camera.useCameraPermissions();
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const { id: userId } = useSelector(selectUser);
   const dispatch = useDispatch();
   useEffect(() => {
     //location
@@ -60,7 +61,6 @@ export default function RegistrationScreen({ navigation }) {
         setErrorMsg("Помилка отримання місцезнаходження");
       }
     })();
-    //keyboard
     const showSubscription = Keyboard.addListener("keyboardDidShow", (e) => {
       setKeyboardHeight(e.endCoordinates.height - 430);
     });
@@ -76,52 +76,31 @@ export default function RegistrationScreen({ navigation }) {
 
   const sendPost = async () => {
     Keyboard.dismiss();
-    // try {
-
-    //
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
-    const photoUri = "qqq"; //await uploadImage(photo, "photo/");
-
-    const docId = await writeDataToFirestore({
-      photoUri,
-      locationTitle,
-      photoTitle,
-      location,
-    });
-    console.log(docId);
-    // setstate(initialState);
-
-    // console.log(location);
-    // dispatch(
-    //   addPost({
-    //     id: Crypto.randomUUID(),
-    //     photo,
-    //     locationTitle,
-    //     photoTitle,
-    //     location,
-    //   })
-    // );
-
+    try {
+      const photoUri = await uploadImage(photo, "photo/");
+      await writeDataToFirestore({
+        userId,
+        photoUri,
+        locationTitle,
+        photoTitle,
+        location,
+      });
+    } catch (error) {
+      setErrorMsg(`Помилка серверу ${error}`);
+    }
     navigation.goBack();
   };
 
   const takePhoto = async () => {
-    // console.log("++++");
     if (cameraRef) {
       const { uri } = await cameraRef.takePictureAsync();
       setPhoto(uri);
-      //console.log("----");
-      //await MediaLibrary.createAssetAsync(uri);
     }
   };
 
   const loadPhoto = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      //  allowsEditing: true,
       aspect: [3, 2],
       quality: 1,
     });
@@ -129,6 +108,8 @@ export default function RegistrationScreen({ navigation }) {
       setPhoto(result.assets[0].uri);
     }
   };
+
+  errorMsg && console.log(errorMsg);
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>

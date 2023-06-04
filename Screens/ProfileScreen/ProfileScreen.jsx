@@ -1,34 +1,35 @@
 import { Feather } from "@expo/vector-icons";
-
-import React, { useState, useEffect, useCallback } from "react";
-import { useNavigation } from "@react-navigation/native";
+import React from "react";
 import {
   StyleSheet,
   Text,
   View,
   ImageBackground,
   TouchableOpacity,
-  Keyboard,
-  Dimensions,
   useWindowDimensions,
   FlatList,
   SafeAreaView,
+  Image,
 } from "react-native";
 
 import { selectPosts } from "../../Redux/post/postsReucer.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PostCard } from "../../componets/PostCard/PostCard.jsx";
+import { selectUser } from "../../Redux/auth/authReducer.js";
+import { authSignOutUser } from "../../Redux/auth/authOperations.js";
 
-export default function ProfileScreen({ onClick }) {
-  const [avatar, setAvatar] = useState(false);
+export default function ProfileScreen() {
+  const { id, login, avatar } = useSelector(selectUser);
   const { height, width } = useWindowDimensions();
-  const navigation = useNavigation();
-  const posts = useSelector(selectPosts);
+  const allPosts = useSelector(selectPosts);
+  const posts = allPosts?.filter((post) => post.userId === id);
 
-  const addAvatar = () => {
-    setAvatar(!avatar);
+  const dispatch = useDispatch();
+  const logOut = () => {
+    dispatch(authSignOutUser());
   };
 
+  console.log(avatar);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -37,6 +38,7 @@ export default function ProfileScreen({ onClick }) {
       >
         <View style={styles.form}>
           <View style={styles.avatar}>
+            <Image style={styles.avatarImg} source={{ uri: avatar }} />
             <TouchableOpacity
               style={{
                 ...styles.avatarBtn,
@@ -46,7 +48,7 @@ export default function ProfileScreen({ onClick }) {
                   avatar ? { rotate: "45deg" } : { rotate: "0deg" },
                 ],
               }}
-              onPress={addAvatar}
+              // onPress={}
             >
               <Feather
                 name="plus"
@@ -58,12 +60,12 @@ export default function ProfileScreen({ onClick }) {
           <TouchableOpacity
             style={styles.logOutBtn}
             activeOpacity={0.8}
-            onPress={() => navigation.navigate("Login")}
+            onPress={logOut}
           >
             <Feather name="log-out" style={styles.logOutIcon} />
           </TouchableOpacity>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>User Name</Text>
+            <Text style={styles.headerTitle}>{login}</Text>
           </View>
           <SafeAreaView style={{ paddingBottom: 296 }}>
             <FlatList
@@ -124,7 +126,6 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: "center",
-    // marginVertical: 16,
     marginTop: 72,
     marginBottom: 12,
   },
@@ -133,12 +134,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Medium",
     fontSize: 30,
   },
-  btnDown: {
-    color: "#1B4371",
-    fontFamily: "Roboto-Regular",
-    fontSize: 16,
-    textAlign: "center",
-  },
+
   avatar: {
     width: 120,
     height: 120,
@@ -148,6 +144,11 @@ const styles = StyleSheet.create({
     left: "50%",
     alignItems: "center",
     transform: [{ translateY: -60 }, { translateX: -44 }],
+  },
+  avatarImg: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
   },
   avatarBtn: {
     width: 24,

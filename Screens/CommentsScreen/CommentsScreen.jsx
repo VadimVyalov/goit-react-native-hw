@@ -1,6 +1,5 @@
 import {
   StyleSheet,
-  Text,
   View,
   Image,
   SafeAreaView,
@@ -11,35 +10,33 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   useWindowDimensions,
-  ScrollView,
   FlatList,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import { CommentBox } from "../../componets/CommentBox/CommentBox";
-import {
-  addComment,
-  selectPosts,
-  selectComments,
-} from "../../Redux/post/postsReucer";
-import { useDispatch, useSelector } from "react-redux";
-import dateFormat from "dateformat";
-import * as Crypto from "expo-crypto";
+import { selectPosts } from "../../Redux/post/postsReucer";
+import { selectUser } from "../../Redux/auth/authReducer";
+import { updateDataOnFirestore } from "../../Redux/post/postOperation";
+import { useSelector } from "react-redux";
+
 const CommentsScreen = () => {
   const {
     params: { id },
   } = useRoute();
   const [text, setText] = useState("");
   const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const { height, width } = useWindowDimensions();
-  const dispatch = useDispatch();
-  const posts = useSelector(selectPosts);
+  const { height } = useWindowDimensions();
 
-  const photo = posts.find((post) => post.id === id).photo;
-  const allComments = useSelector(selectComments);
-  const comments =
-    allComments?.filter((comment) => comment.postid === id) || [];
+  const { id: userId, avatar } = useSelector(selectUser);
+  const posts = useSelector(selectPosts);
+  const comments = posts
+    .find((post) => post.id === id)
+    .comments?.map((comment) => JSON.parse(comment))
+    .map((owner) => ({ ...owner, owner: owner.userId === userId }));
+
+  const photo = posts.find((post) => post.id === id).photoUri;
   const flatlistRef = useRef(null);
 
   useEffect(() => {
@@ -55,25 +52,15 @@ const CommentsScreen = () => {
     };
   }, []);
 
-  const addNewComment = () => {
-    const date = dateFormat(new Date(), "dd mmmm , yyyy | HH:MM");
-    const avatar =
-      comments.length % 3
-        ? require("../../assets/images/avatar.png")
-        : require("../../assets/images/avatar_guest.png");
-    const newComment = {
-      postid: id,
-      id: Crypto.randomUUID(),
-      text,
-      date,
-      owner: comments.length % 3,
-      avatar: avatar,
-    };
-    dispatch(addComment(newComment));
-    Keyboard.dismiss();
-
-    comments.length > 1 &&
+  const addNewComment = async () => {
+    const comment = { text, userId, avatar };
+    try {
+      Keyboard.dismiss();
+      await updateDataOnFirestore(comment, id);
       flatlistRef?.current?.scrollToEnd({ animated: true });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -103,7 +90,7 @@ const CommentsScreen = () => {
                   marginTop: 60,
                 }}
                 data={comments}
-                keyExtractor={(comment) => comment.id}
+                keyExtractor={(comment) => comment.date}
                 renderItem={(comment) => <CommentBox comment={comment.item} />}
               />
             </SafeAreaView>

@@ -1,4 +1,4 @@
-import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
@@ -118,11 +118,11 @@ export default function RegistrationScreen() {
                   }}
                   onPress={addAvatar}
                 >
-                  <AntDesign
+                  <Feather
                     name="plus"
                     size={16}
                     color={avatar ? "#bdbdbd" : "#FF6C00"}
-                  ></AntDesign>
+                  ></Feather>
                 </TouchableOpacity>
               </View>
               <View style={styles.header}>
@@ -134,7 +134,6 @@ export default function RegistrationScreen() {
                 }
                 value={state.login}
                 placeholder="Введіть логін"
-                //onFocus={null}
               />
               <InputEmail
                 onChangeText={(value) =>
@@ -142,21 +141,18 @@ export default function RegistrationScreen() {
                 }
                 value={state.email}
                 placeholder="Адреса електронної пошти"
-                //onFocus={null}
               />
               <InputPassword
                 onChangeText={(value) =>
                   setstate((prevState) => ({ ...prevState, password: value }))
                 }
                 value={state.password}
-                // onFocus={null}
               />
 
               <TouchableOpacity
                 activeOpacity={0.8}
                 style={styles.btn}
                 onPress={sendLogin}
-                // disabled={true}
               >
                 <Text style={styles.btnTitle}>Зареєструватися</Text>
               </TouchableOpacity>

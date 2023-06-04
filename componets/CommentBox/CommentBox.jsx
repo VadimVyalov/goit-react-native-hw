@@ -3,6 +3,7 @@ import dateFormat from "dateformat";
 
 export const CommentBox = ({ comment }) => {
   const { avatar, text, owner = false, date } = comment;
+
   return (
     <View
       style={{
@@ -10,7 +11,7 @@ export const CommentBox = ({ comment }) => {
         flexDirection: owner ? "row-reverse" : "row",
       }}
     >
-      <Image style={styles.avatar} source={avatar} />
+      <Image style={styles.avatar} source={{ uri: avatar }} />
       <View
         style={{
           ...styles.comment,
@@ -20,7 +21,7 @@ export const CommentBox = ({ comment }) => {
       >
         <Text style={styles.text}>{text}</Text>
         <Text style={{ ...styles.date, textAlign: owner ? "left" : "right" }}>
-          {date}
+          {dateFormat(new Date(Number(date)), "dd mmmm , yyyy | HH:MM")}
         </Text>
       </View>
     </View>

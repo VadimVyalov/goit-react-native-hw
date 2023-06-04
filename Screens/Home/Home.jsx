@@ -2,7 +2,6 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import PostsScreen from "../../Screens/PostsScreen/PostsScreen";
 import ProfileScreen from "../../Screens/ProfileScreen/ProfileScreen";
 import CreatePostsScreen from "../../Screens/CreatePostsScreen/CreatePostsScreen";

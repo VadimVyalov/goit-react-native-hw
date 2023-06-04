@@ -1,16 +1,19 @@
 import { StyleSheet, SafeAreaView, FlatList } from "react-native";
-
-import React from "react";
-
+import React, { useEffect } from "react";
 import { UserInfo } from "../../componets/UserInfo/UserInfo.jsx";
 import { PostCard } from "../../componets/PostCard/PostCard.jsx";
 import { selectPosts } from "../../Redux/post/postsReucer.js";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../../Redux/auth/authReducer.js";
+import { getDataFromFirestore } from "../../Redux/post/postOperation.js";
 
 export default function PostsScreen() {
   const posts = useSelector(selectPosts);
   const { login, email, avatar } = useSelector(selectUser);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getDataFromFirestore());
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

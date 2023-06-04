@@ -2,28 +2,24 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { selectComments } from "../../Redux/post/postsReucer";
-import { useSelector } from "react-redux";
-import { getDataFromFirestore } from "../../Redux/post/postOperation";
-
+import dateFormat from "dateformat";
 export const PostCard = ({ post }) => {
-  const allComments = useSelector(selectComments);
+  const {
+    id,
+    photoUri,
+    photoTitle,
+    locationTitle,
+    likes,
+    location,
+    comments = [],
+  } = post;
 
-  const { id, photo, photoTitle, locationTitle, likes, location } = post;
-  const comments =
-    allComments?.filter((comment) => comment.postid === id).length || 0;
   const navigation = useNavigation();
-
-  useEffect(() => {
-    (async () => {
-      await getDataFromFirestore();
-    })();
-  }, []);
 
   return (
     <View style={styles.postCard}>
       <View>
-        <Image style={styles.image} source={{ uri: photo }} />
+        <Image style={styles.image} source={{ uri: photoUri }} />
         <Text style={styles.description}>{photoTitle}</Text>
       </View>
 
@@ -36,12 +32,18 @@ export const PostCard = ({ post }) => {
             <Feather
               name="message-circle"
               style={styles.commentIcon}
-              color={!comments ? "#BDBDBD" : "#FF6C00"}
+              color={!comments.length ? "#BDBDBD" : "#FF6C00"}
             />
-            <Text style={styles.comment}>{comments}</Text>
+            <Text style={styles.comment}>{comments.length}</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.likeContainer}>
+          <TouchableOpacity
+            style={styles.likeContainer}
+            onPress={() => {
+              const date = Date.now();
+              console.log(dateFormat(new Date(date), "dd mmmm , yyyy | HH:MM"));
+            }}
+          >
             <Feather
               style={styles.likeIcon}
               name="thumbs-up"
